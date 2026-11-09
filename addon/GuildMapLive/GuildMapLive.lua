@@ -67,8 +67,9 @@ end
 ------------------------------------------------------------------------
 -- Empfangen
 ------------------------------------------------------------------------
-local function onAddonMessage(prefix, msg, _, sender)
-  if prefix ~= PREFIX then return end
+local function onAddonMessage(prefix, msg, channel, sender)
+  -- nur Gildenkanal: sonst könnten Fremde per Flüstern Fake-Mitglieder einschleusen
+  if prefix ~= PREFIX or channel ~= "GUILD" then return end
   local v, cls, lvl, xp, xpMax, rested, cont, x, y, zone = strsplit("|", msg)
   if v ~= "1" then return end
   local m = member(shortName(sender))
