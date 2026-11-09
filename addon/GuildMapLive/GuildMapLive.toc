@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: Guild Map Live
+## Notes: Teilt Position, Level und XP mit der Gilde und überträgt sie (Relay-Modus) an die Gildenkarten-Web-App.
+## Version: 0.1.0
+## SavedVariables: GuildMapLiveDB
+
+GuildMapLive.lua

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Pixel-Streifen Test</title>
+<style>
+  html, body { margin: 0; background: #222; color: #ccc; font: 14px sans-serif; }
+  canvas { display: block; image-rendering: pixelated; }
+  p { padding: 12px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<p>Simuliert den Pixel-Streifen des Addons (oben links). Companion starten und prüfen, ob „Thalrok“ ankommt.</p>
+<script type="module">
+  // gleiche Kodierung wie das Addon (siehe companion/protocol.js)
+  const BLOCK = 4, DATA_BLOCKS = 140, MAX = Math.floor(DATA_BLOCKS * 3 / 2) - 6;
+  const dpr = window.devicePixelRatio || 1;
+  const c = document.getElementById('c');
+  c.width = (DATA_BLOCKS + 2) * BLOCK; c.height = BLOCK;
+  c.style.width = c.width / dpr + 'px'; c.style.height = c.height / dpr + 'px';
+  const ctx = c.getContext('2d');
+  let seq = 0, x = 0.55;
+  function draw(text) {
+    const p = [...new TextEncoder().encode(text)].slice(0, MAX);
+    let sum = 0, xr = 0; for (const b of p) { sum += b; xr ^= b; }
+    seq = (seq + 1) % 256;
+    const bytes = [0xa5, seq, p.length, sum % 256, (sum >> 8) % 256, xr, ...p];
+    const nib = bytes.flatMap(b => [b >> 4, b & 15]);
+    const blocks = [[255, 0, 255], [0, 255, 0]];
+    for (let k = 0; k < DATA_BLOCKS; k++) blocks.push([0, 1, 2].map(j => (nib[k * 3 + j] ?? 0) * 16 + 8));
+    blocks.forEach(([r, g, b], i) => { ctx.fillStyle = `rgb(${r},${g},${b})`; ctx.fillRect(i * BLOCK, 0, BLOCK, BLOCK); });
+  }
+  setInterval(() => {
+    x = 0.3 + ((x + 0.01) % 0.4);
+    draw(`Thalrok|WARRIOR|58|${Math.round(x * 200000)}|209800|5000|Pixeltest|1|1|E|${Math.round(x * 10000)}|6203|0`);
+  }, 200);
+</script>
+</body>
+</html>

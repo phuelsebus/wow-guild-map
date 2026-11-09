@@ -1,0 +1,27 @@
+{
+  "name": "wow-guild-map",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Live-Karte von Azeroth mit Positionen, Level und XP aller Gildenmitglieder",
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,green \"node --watch server/index.js\" \"vite\"",
+    "demo": "concurrently -n server,web -c blue,green \"node --watch server/index.js --demo\" \"vite\"",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "companion": "node companion/index.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "express": "^4.21.2",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "vite": "^6.0.7"
+  }
+}
