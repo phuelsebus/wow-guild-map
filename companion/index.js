@@ -45,7 +45,9 @@ function createUploader(cfg) {
           headers: {
             'content-type': 'application/json',
             apikey: cfg.supabaseAnonKey,
-            authorization: `Bearer ${cfg.supabaseAnonKey}`,
+            // alter anon key ist ein JWT (eyJ…) und gehört auch in Authorization;
+            // der neue publishable key (sb_publishable_…) nur in apikey
+            ...(cfg.supabaseAnonKey.startsWith('eyJ') ? { authorization: `Bearer ${cfg.supabaseAnonKey}` } : {}),
           },
           body: JSON.stringify({ token: cfg.token, members }),
         });
